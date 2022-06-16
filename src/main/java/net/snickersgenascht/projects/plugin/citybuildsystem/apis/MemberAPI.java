@@ -1,0 +1,55 @@
+package net.snickersgenascht.projects.plugin.citybuildsystem.apis;
+
+import net.snickersgenascht.projects.plugin.citybuildsystem.database.MySQL;
+import org.bukkit.entity.Player;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+public class MemberAPI {
+
+    private final MySQL mySQL;
+    private final Date now = new Date();
+    private final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.GERMANY);
+    public SimpleDateFormat getFormat() {return format;}
+    public Date getNow() {return now;}
+    public MemberAPI() {
+        this.mySQL = new MySQL();
+    }
+    private void createMemberTable() {try {PreparedStatement ps = MySQL.getStatement("CREATE TABLE IF NOT EXISTS citybuild_members (username VARCHAR(100), uuid VARCHAR(100), discord_id VARCHAR(100), discord_name VARCHAR(100), first_time VARCHAR(100), last_time VARCHAR(100), teamspeak_id VARCHAR(100), teamspeak_name VARCHAR(100))");assert ps != null;ps.executeUpdate();} catch (Exception ex) {ex.printStackTrace();}}
+    public void connect() {this.mySQL.connect();this.createMemberTable();}
+    public void disconnect() {this.mySQL.disconnect();}
+    public void registerPerson(Player player) {try{PreparedStatement ps = MySQL.getStatement("INSERT INTO citybuild_members (username, uuid, discord_id, discord_name, first_time, last_time, teamspeak_id, teamspeak_name, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");ps.setString(1, player.getName()); ps.setString(2, player.getUniqueId().toString());ps.setString(3, null);ps.setString(4, null);ps.setString(5, this.getFormat().format(this.getNow()));ps.setString(6, null);ps.setString(7, null);ps.setString(8, null);ps.setString(9, "online");ps.executeUpdate();ps.close(); }catch(Exception ex){     ex.printStackTrace(); }}
+    public boolean isUUIDRegistered(Player player) {try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE uuid= ?");ps.setString(1, player.getUniqueId().toString());ResultSet rs = ps.executeQuery();boolean user = rs.next();rs.close();rs.close();return user;}catch(Exception ex){ex.printStackTrace();}return false;}
+    public boolean isUsernameRegistered(String player) {try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE username= ?");ps.setString(1, player);ResultSet rs = ps.executeQuery();boolean user = rs.next();rs.close();rs.close();return user;}catch(Exception ex){ex.printStackTrace();}return false;}
+    public boolean isDiscordIDRegistered(String id) {try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE discord_id= ?");ps.setString(1, id);ResultSet rs = ps.executeQuery();boolean user = rs.next();rs.close();rs.close();return user;}catch(Exception ex){ex.printStackTrace();}return false;}
+    public boolean isDiscordNameRegistered(String name) {try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE discord_name= ?");ps.setString(1, name);ResultSet rs = ps.executeQuery();boolean user = rs.next();rs.close();rs.close();return user;}catch(Exception ex){ex.printStackTrace();}return false;}
+    public boolean isTeamSpeakIDRegistered(String id) {try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE teamspeak_id= ?");ps.setString(1, id);ResultSet rs = ps.executeQuery();boolean user = rs.next();rs.close();rs.close();return user;}catch(Exception ex){ex.printStackTrace();}return false;}
+    public boolean isTeamSpeakNameRegistered(String name) {try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE teamspeak_name= ?");ps.setString(1, name);ResultSet rs = ps.executeQuery();boolean user = rs.next();rs.close();rs.close();return user;}catch(Exception ex){ex.printStackTrace();}return false;}
+    public String getFirstJoinTime(Player player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE uuid= ?");ps.setString(1, player.getUniqueId().toString());ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("first_time");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getFirstJoinTime(String player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE username= ?");ps.setString(1, player);ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("first_time");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getLastLeaveTime(Player player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE uuid= ?");ps.setString(1, player.getUniqueId().toString());ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("last_time");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getLastLeaveTime(String player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE username= ?");ps.setString(1, player);ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("last_time");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getDiscordName(Player player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE uuid= ?");ps.setString(1, player.getUniqueId().toString());ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("discord_name");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getDiscordName(String player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE username= ?");ps.setString(1, player);ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("discord_name");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getDiscordID(Player player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE uuid= ?");ps.setString(1, player.getUniqueId().toString());ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("discord_id");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getDiscordID(String player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE username= ?");ps.setString(1, player);ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("discord_id");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getTeamSpeakID(Player player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE uuid= ?");ps.setString(1, player.getUniqueId().toString());ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("teamspeak_id");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getTeamSpeakID(String player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE username= ?");ps.setString(1, player);ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("teamspeak_id");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getTeamSpeakName(Player player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE uuid= ?");ps.setString(1, player.getUniqueId().toString());ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("teamspeak_name");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getTeamSpeakName(String player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE username= ?");ps.setString(1, player);ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("teamspeak_name");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getUUID(String player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE username= ?");ps.setString(1, player);ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("uuid");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getPlayerState(String player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE username= ?");ps.setString(1, player);ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("state");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getPlayerState(Player player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE uuid= ?");ps.setString(1, player.getUniqueId().toString());ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("state");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public String getUserName(Player player){try{PreparedStatement ps = MySQL.getStatement("SELECT * FROM citybuild_members WHERE uuid= ?");ps.setString(1, player.getUniqueId().toString());ResultSet rs = ps.executeQuery();rs.next();String icon = rs.getString("username");rs.close();ps.close();return icon;}catch(Exception ex){ex.printStackTrace();}return null;}
+    public ArrayList<String> getUserNames(int max) {ArrayList<String> list = new ArrayList<>();try {PreparedStatement preparedStatement = MySQL.getStatement("SELECT * FROM citybuild_members ORDER BY username DESC LIMIT ?");preparedStatement.setInt(1, max);ResultSet resultSet = preparedStatement.executeQuery();while (resultSet.next()) {list.add(resultSet.getString("username"));}} catch (SQLException e) {e.printStackTrace();}return list;}
+    public Integer countRowsInOnlineTable(){try{PreparedStatement sql = MySQL.getStatement("SELECT COUNT(*) FROM citybuild_members");ResultSet rs = sql.executeQuery();rs.first();int numberOfRows = rs.getInt("COUNT(*)");sql.close();return numberOfRows;}catch (Exception e){e.printStackTrace();return 0;}}
+    public void setStatus(Player player, String status) {PreparedStatement st = null;try {st = MySQL.con.prepareStatement("UPDATE citybuild_members SET state = ? WHERE uuid = ?");st.setString(1, status);st.setString(2, player.getUniqueId().toString());st.executeUpdate();} catch (SQLException e) {e.printStackTrace();}}
+    public void setUsername(Player player, String username) {PreparedStatement st = null;try {st = MySQL.con.prepareStatement("UPDATE citybuild_members SET username = ? WHERE uuid = ?");st.setString(1, username);st.setString(2, player.getUniqueId().toString());st.executeUpdate();} catch (SQLException e) {e.printStackTrace();}}
+
+}

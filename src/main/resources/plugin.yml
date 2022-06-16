@@ -1,0 +1,27 @@
+name: CityBuildSystem
+version: 1.0
+main: net.snickersgenascht.projects.plugin.citybuildsystem.CityBuildSystem
+api-version: 1.16
+authors: [ Snickersgenascht ]
+
+commands:
+  ping:
+  level:
+  weather:
+    aliases:
+      - wetter
+  food:
+  day:
+    aliases:
+      - tag
+      - d
+  night:
+    aliases:
+      - nacht
+      - n
+  homes:
+  home:
+  hearts:
+    aliases:
+      - heart
+      - herz
