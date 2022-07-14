@@ -58,10 +58,10 @@ public class CreatorAPI implements Listener {
 
 
     public static ItemStack Headcreator(String setOwner, int i, short anzahl, Object lore) {
-        /* 61 */     return null;
-        /*    */   }
+            return null;
+          }
 
     public static ItemStack Headcreator(Material skullItem, int i, short s) {
-        /* 66 */     return null;
-        /*    */   }
+             return null;
+         }
 }
